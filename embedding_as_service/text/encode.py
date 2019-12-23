@@ -126,3 +126,6 @@ class Encoder(object, metaclass=ArgSingleton):
         embeddings = np.vstack(embeddings)
 
         return embeddings
+
+    def get_full_word_list(self):
+        return self.embedding_cls.get_full_word_list()

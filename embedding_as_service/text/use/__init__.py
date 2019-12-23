@@ -59,3 +59,6 @@ class Embeddings(object):
                **kwargs
                ) -> Optional[np.array]:
         return self.sess.run(self.use_module(texts))
+
+    def get_full_word_list(self):
+        raise NotImplementedError("Not implemented yet!")

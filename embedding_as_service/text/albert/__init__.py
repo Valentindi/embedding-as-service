@@ -156,5 +156,11 @@ class Embeddings(object):
             return pooled
 
     def get_full_word_list(self):
-        raise NotImplementedError("Not implemented yet!")
 
+        def remove_prefix(inp):
+            PREFIX_CHAR = '▁'
+            if len(inp.split(PREFIX_CHAR)[0]) < 1:
+                return PREFIX_CHAR.join(inp.split(PREFIX_CHAR)[1:])
+            return inp
+
+        return [remove_prefix(x) for x in list(Embeddings.tokenizer.vocab.keys())]

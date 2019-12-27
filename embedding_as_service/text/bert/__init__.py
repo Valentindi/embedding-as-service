@@ -172,5 +172,5 @@ class Embeddings(object):
             return pooled
 
     def get_full_word_list(self):
-        raise NotImplementedError("Not implemented yet!")
+        return [x for x in list(Embeddings.tokenizer.vocab.keys()) if "unused" not in x]
 

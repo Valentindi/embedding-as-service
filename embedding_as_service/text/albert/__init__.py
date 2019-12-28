@@ -154,15 +154,16 @@ class Embeddings(object):
             pooled = pooling_func(token_embeddings, axis=1)
             return pooled
 
+    @staticmethod
+    def remove_prefix(inp):
+        PREFIX_CHAR = '▁'
+        if len(inp.split(PREFIX_CHAR)[0]) < 1:
+            return PREFIX_CHAR.join(inp.split(PREFIX_CHAR)[1:])
+        return inp
+
     def get_full_word_list(self):
-
-        def remove_prefix(inp):
-            PREFIX_CHAR = '▁'
-            if len(inp.split(PREFIX_CHAR)[0]) < 1:
-                return PREFIX_CHAR.join(inp.split(PREFIX_CHAR)[1:])
-            return inp
-
-        return [remove_prefix(x) for x in list(Embeddings.tokenizer.vocab.keys())]
+        return [self.remove_prefix(x) for x in list(Embeddings.tokenizer.vocab.keys())]
 
     def get_all_embeddings(self):
-        raise NotImplementedError("Not implemented yet!")
+        return dict(zip([self.remove_prefix(x) for x in list(Embeddings.tokenizer.vocab.keys())],
+                        list(Embeddings.tokenizer.vocab.values())))

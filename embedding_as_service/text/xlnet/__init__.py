@@ -169,3 +169,9 @@ class Embeddings(object):
             return inp
 
         return [remove_prefix(Embeddings.tokenizer.id_to_piece(id)) for id in range(0, Embeddings.tokenizer.get_piece_size())]
+
+    def get_all_embeddings(self, pooling=False, max_seq_length=9999):
+        full_wordlist = self.get_full_word_list()
+        features = self.encode(full_wordlist, pooling, max_seq_length)
+        res= dict(zip(full_wordlist, features))
+        return res

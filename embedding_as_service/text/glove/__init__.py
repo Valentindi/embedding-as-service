@@ -169,4 +169,4 @@ class Embeddings(object):
         return list(self.word_vectors.keys())
 
     def get_all_embeddings(self):
-        raise NotImplementedError("Not implemented yet!")
+        return dict(zip(list(self.word_vectors.keys()), list(self.word_vectors.vocab.values())))

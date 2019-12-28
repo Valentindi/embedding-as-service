@@ -174,4 +174,5 @@ class Embeddings(object):
         return [x for x in list(Embeddings.tokenizer.vocab.keys()) if "unused" not in x]
 
     def get_all_embeddings(self):
-        raise NotImplementedError("Not implemented yet!")
+        return dict(zip([x for x in list(Embeddings.tokenizer.vocab.keys()) if "unused" not in x],
+                        [x for x in list(Embeddings.tokenizer.vocab.values()) if "unused" not in x]))

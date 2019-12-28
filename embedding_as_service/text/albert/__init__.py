@@ -1,58 +1,57 @@
 from typing import List, Dict, Tuple, Optional, Union
-import numpy as np
 
-from embedding_as_service.text import Embedding
+import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
 from tqdm import tqdm
-from .tokenization import FullTokenizer
 
+from embedding_as_service.text import Embedding
 from embedding_as_service.utils import POOL_FUNC_MAP
+from .tokenization import FullTokenizer
 
 
 class Embeddings(object):
-
     EMBEDDING_MODELS: List[Embedding] = [
-                        Embedding(name='albert_base',
-                                  dimensions=768,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522(sub-word)',
-                                  download_url='https://tfhub.dev/google/albert_base/1?tf-hub-format=compressed',
-                                  format='tar.gz',
-                                  architecture='Transformer, Layers=12, Hidden = 768, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name='albert_base',
+                  dimensions=768,
+                  corpus_size='3300M',
+                  vocabulary_size='30522(sub-word)',
+                  download_url='https://tfhub.dev/google/albert_base/1?tf-hub-format=compressed',
+                  format='tar.gz',
+                  architecture='Transformer, Layers=12, Hidden = 768, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name='albert_large',
-                                  dimensions=1024,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522(sub-word)',
-                                  download_url='https://tfhub.dev/google/albert_large/1?tf-hub-format=compressed',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=24, Hidden = 1024, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name='albert_large',
+                  dimensions=1024,
+                  corpus_size='3300M',
+                  vocabulary_size='30522(sub-word)',
+                  download_url='https://tfhub.dev/google/albert_large/1?tf-hub-format=compressed',
+                  format='tar.gz',
+                  architecture='Transformer Layers=24, Hidden = 1024, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name='albert_xlarge',
-                                  dimensions=2048,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522 (sub-word)',
-                                  download_url='https://tfhub.dev/google/albert_xlarge/1?tf-hub-format=compressed',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=24, Hidden = 2048, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name='albert_xlarge',
+                  dimensions=2048,
+                  corpus_size='3300M',
+                  vocabulary_size='30522 (sub-word)',
+                  download_url='https://tfhub.dev/google/albert_xlarge/1?tf-hub-format=compressed',
+                  format='tar.gz',
+                  architecture='Transformer Layers=24, Hidden = 2048, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name='albert_xxlarge',
-                                  dimensions=4096,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522 (sub-word)',
-                                  download_url='https://tfhub.dev/google/albert_xxlarge/1?tf-hub-format=compressed',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=12, Hidden = 4096, heads = 16',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en')
-                        ]
+        Embedding(name='albert_xxlarge',
+                  dimensions=4096,
+                  corpus_size='3300M',
+                  vocabulary_size='30522 (sub-word)',
+                  download_url='https://tfhub.dev/google/albert_xxlarge/1?tf-hub-format=compressed',
+                  format='tar.gz',
+                  architecture='Transformer Layers=12, Hidden = 4096, heads = 16',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en')
+    ]
 
     EMBEDDING_MODELS: Dict[str, Embedding] = {embedding.name: embedding for embedding in EMBEDDING_MODELS}
 
@@ -68,7 +67,7 @@ class Embeddings(object):
         tokenization_info = self.albert_module(signature="tokenization_info", as_dict=True)
 
         sentence_piece_file, do_lower_case = self.sess.run([tokenization_info["vocab_file"],
-                                                   tokenization_info["do_lower_case"]])
+                                                            tokenization_info["do_lower_case"]])
 
         Embeddings.tokenizer = FullTokenizer(
             vocab_file=None, do_lower_case=do_lower_case,
@@ -164,3 +163,6 @@ class Embeddings(object):
             return inp
 
         return [remove_prefix(x) for x in list(Embeddings.tokenizer.vocab.keys())]
+
+    def get_all_embeddings(self):
+        raise NotImplementedError("Not implemented yet!")

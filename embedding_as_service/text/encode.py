@@ -129,3 +129,6 @@ class Encoder(object, metaclass=ArgSingleton):
 
     def get_full_word_list(self):
         return self.embedding_cls.get_full_word_list()
+
+    def get_all_embeddings(self):
+        return self.embedding_cls.get_all_embeddings()

@@ -1,73 +1,72 @@
 from typing import List, Dict, Tuple, Optional, Union
-import numpy as np
 
-from embedding_as_service.text import Embedding
+import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
-from tqdm import tqdm
 from bert.tokenization import FullTokenizer
+from tqdm import tqdm
 
+from embedding_as_service.text import Embedding
 from embedding_as_service.utils import POOL_FUNC_MAP
 
 
 class Embeddings(object):
-
     EMBEDDING_MODELS: List[Embedding] = [
-                        Embedding(name=u'bert_base_uncased',
-                                  dimensions=768,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522(sub-word)',
-                                  download_url='https://storage.googleapis.com/tfhub-modules/'
-                                               'google/bert_uncased_L-12_H-768_A-12/1.tar.gz',
-                                  format='tar.gz',
-                                  architecture='Transformer, Layers=12, Hidden = 768, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name=u'bert_base_uncased',
+                  dimensions=768,
+                  corpus_size='3300M',
+                  vocabulary_size='30522(sub-word)',
+                  download_url='https://storage.googleapis.com/tfhub-modules/'
+                               'google/bert_uncased_L-12_H-768_A-12/1.tar.gz',
+                  format='tar.gz',
+                  architecture='Transformer, Layers=12, Hidden = 768, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name=u'bert_base_cased',
-                                  dimensions=768,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522(sub-word)',
-                                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
-                                               'bert_cased_L-12_H-768_A-12/1.tar.gz',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=12, Hidden = 768, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name=u'bert_base_cased',
+                  dimensions=768,
+                  corpus_size='3300M',
+                  vocabulary_size='30522(sub-word)',
+                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
+                               'bert_cased_L-12_H-768_A-12/1.tar.gz',
+                  format='tar.gz',
+                  architecture='Transformer Layers=12, Hidden = 768, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name=u'bert_multi_cased',
-                                  dimensions=768,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522 (sub-word)',
-                                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
-                                               'bert_multi_cased_L-12_H-768_A-12/1.tar.gz',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=12, Hidden = 768, heads = 12',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name=u'bert_multi_cased',
+                  dimensions=768,
+                  corpus_size='3300M',
+                  vocabulary_size='30522 (sub-word)',
+                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
+                               'bert_multi_cased_L-12_H-768_A-12/1.tar.gz',
+                  format='tar.gz',
+                  architecture='Transformer Layers=12, Hidden = 768, heads = 12',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name=u'bert_large_uncased',
-                                  dimensions=1024,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522 (sub-word)',
-                                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
-                                               'bert_uncased_L-24_H-1024_A-16/1.tar.gz',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=24, Hidden = 1024, heads = 16',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en'),
+        Embedding(name=u'bert_large_uncased',
+                  dimensions=1024,
+                  corpus_size='3300M',
+                  vocabulary_size='30522 (sub-word)',
+                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
+                               'bert_uncased_L-24_H-1024_A-16/1.tar.gz',
+                  format='tar.gz',
+                  architecture='Transformer Layers=24, Hidden = 1024, heads = 16',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en'),
 
-                        Embedding(name=u'bert_large_cased',
-                                  dimensions=1024,
-                                  corpus_size='3300M',
-                                  vocabulary_size='30522 (sub-word)',
-                                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
-                                               'bert_cased_L-24_H-1024_A-16/1.tar.gz',
-                                  format='tar.gz',
-                                  architecture='Transformer Layers=24, Hidden = 1024, heads = 16',
-                                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
-                                  language='en')
-                        ]
+        Embedding(name=u'bert_large_cased',
+                  dimensions=1024,
+                  corpus_size='3300M',
+                  vocabulary_size='30522 (sub-word)',
+                  download_url='https://storage.googleapis.com/tfhub-modules/google/'
+                               'bert_cased_L-24_H-1024_A-16/1.tar.gz',
+                  format='tar.gz',
+                  architecture='Transformer Layers=24, Hidden = 1024, heads = 16',
+                  trained_data='BooksCorpus(800M) English Wikipedia (2500M) words',
+                  language='en')
+    ]
 
     EMBEDDING_MODELS: Dict[str, Embedding] = {embedding.name: embedding for embedding in EMBEDDING_MODELS}
 
@@ -174,3 +173,5 @@ class Embeddings(object):
     def get_full_word_list(self):
         return [x for x in list(Embeddings.tokenizer.vocab.keys()) if "unused" not in x]
 
+    def get_all_embeddings(self):
+        raise NotImplementedError("Not implemented yet!")

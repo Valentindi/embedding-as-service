@@ -77,6 +77,9 @@ class Embeddings(object):
             pooling_func = POOL_FUNC_MAP[pooling]
             pooled = pooling_func(token_embeddings, axis=1)
             return pooled
+
     def get_full_word_list(self):
         raise NotImplementedError("Not implemented yet!")
 
+    def get_all_embeddings(self):
+        raise NotImplementedError("Not implemented yet!")

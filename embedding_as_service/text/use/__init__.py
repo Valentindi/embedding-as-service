@@ -62,3 +62,6 @@ class Embeddings(object):
 
     def get_full_word_list(self):
         raise NotImplementedError("Not implemented yet!")
+
+    def get_all_embeddings(self):
+        raise NotImplementedError("Not implemented yet!")
